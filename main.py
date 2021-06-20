@@ -1,39 +1,28 @@
-from grid import Grid
-from entity import Entity
-
-import threading
 import time
+from board import Board 
+from entity import Entity
+import threading
+import numpy as np
+entities = []
+
+def loop(board):
+    while(1):
+        time.sleep(1)
+        print(np.array(board.grid))
+        print('\033[F'*21)
 
 
-
-def move_entities(entity, board):
-    x, y = entity.get_location()
-    board.remove(x, y)
-    x, y = entity.update_location()
-    board.move(x, y)
-    return entity, board
-
-
-
-
-
-
+def create_entity(board, rows, cols):
+    Entity(board, rows, cols)
 
 
 if __name__ == '__main__':
-    row = 20
-    col = 20
-    board = Grid(row, col)
-    entities = []
-    for i in range(5):
-        entity = Entity(row, col)
-        entities.append(entity)
 
-    while(1):  
-        time.sleep(2) 
-        for idx, i in enumerate(entities):
-            entities[idx], board = move_entities(i, board)
-        for i in board.get_grid():
-            print(i)
-    
-    
+    rows = 20
+    cols = 20
+    board = Board(rows, cols)
+    for i in range(5):
+        thread = threading.Thread(target=create_entity, args=(board, rows, cols))
+        thread.start()
+
+    loop(board)
