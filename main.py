@@ -9,8 +9,11 @@ def loop(board):
     while(1):
         time.sleep(1)
         print(np.array(board.grid))
-        print('\033[F'*21)
-
+        for i in board.get_entities():
+            if i.get_state():
+                print(f'{i.get_name()} is fighting!')
+        # print('\033[F'*23)
+        print()
 
 def create_entity(board, rows, cols):
     Entity(board, rows, cols)
@@ -24,5 +27,7 @@ if __name__ == '__main__':
     for i in range(5):
         thread = threading.Thread(target=create_entity, args=(board, rows, cols))
         thread.start()
+
+
 
     loop(board)
